@@ -33,8 +33,14 @@ export const styles = StyleSheet.create({
   },
   brand: { fontSize: 13, fontFamily: "Helvetica-Bold", color: COLORS.ink },
   brandAccent: { color: COLORS.emerald },
-  docTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", marginTop: 18 },
-  subtitle: { fontSize: 10, color: COLORS.gray, marginTop: 2 },
+  docTitle: {
+    fontSize: 18,
+    fontFamily: "Helvetica-Bold",
+    marginTop: 18,
+    marginBottom: 6,
+    lineHeight: 1.2,
+  },
+  subtitle: { fontSize: 10, color: COLORS.gray, marginTop: 0 },
   metaBox: {
     marginTop: 16,
     padding: 12,
