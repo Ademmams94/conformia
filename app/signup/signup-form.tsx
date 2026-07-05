@@ -19,7 +19,13 @@ export function SignupForm() {
         <label htmlFor="companyName" className="text-sm font-medium">
           Nom de la société
         </label>
-        <input id="companyName" name="companyName" required className={inputClass} />
+        <input
+          id="companyName"
+          name="companyName"
+          required
+          defaultValue={state?.values?.companyName ?? ""}
+          className={inputClass}
+        />
         {state?.fieldErrors?.companyName && (
           <p className="text-xs text-red-600">
             {state.fieldErrors.companyName[0]}
@@ -32,7 +38,12 @@ export function SignupForm() {
           <label htmlFor="sector" className="text-sm font-medium">
             Secteur
           </label>
-          <select id="sector" name="sector" defaultValue="" className={inputClass}>
+          <select
+            id="sector"
+            name="sector"
+            defaultValue={state?.values?.sector ?? ""}
+            className={inputClass}
+          >
             <option value="">—</option>
             <option value="recrutement_rh">Recrutement / RH</option>
             <option value="fintech_credit">Fintech / Crédit</option>
@@ -50,6 +61,7 @@ export function SignupForm() {
             type="number"
             min={1}
             placeholder="ex : 25"
+            defaultValue={state?.values?.employeeCount ?? ""}
             className={inputClass}
           />
         </div>
@@ -59,7 +71,12 @@ export function SignupForm() {
         <label htmlFor="siret" className="text-sm font-medium">
           SIRET <span className="text-zinc-400">(optionnel)</span>
         </label>
-        <input id="siret" name="siret" className={inputClass} />
+        <input
+          id="siret"
+          name="siret"
+          defaultValue={state?.values?.siret ?? ""}
+          className={inputClass}
+        />
       </div>
 
       <hr className="my-1 border-black/5 dark:border-white/10" />
@@ -74,6 +91,7 @@ export function SignupForm() {
           type="email"
           autoComplete="email"
           required
+          defaultValue={state?.values?.email ?? ""}
           className={inputClass}
         />
         {state?.fieldErrors?.email && (
@@ -93,8 +111,15 @@ export function SignupForm() {
           required
           className={inputClass}
         />
+        <p className="text-xs text-zinc-500">
+          8 caractères min., avec une lettre, un chiffre et un caractère spécial.
+        </p>
         {state?.fieldErrors?.password && (
-          <p className="text-xs text-red-600">{state.fieldErrors.password[0]}</p>
+          <ul className="text-xs text-red-600">
+            {state.fieldErrors.password.map((msg) => (
+              <li key={msg}>• {msg}</li>
+            ))}
+          </ul>
         )}
       </div>
 
