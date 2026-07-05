@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ConformIA — Options</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Arial, sans-serif;
+        max-width: 460px;
+        margin: 2rem auto;
+        padding: 0 1.25rem;
+        color: #18181b;
+      }
+      h1 {
+        font-size: 1.15rem;
+      }
+      h1 span {
+        color: #059669;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 1rem 0 0.35rem;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.55rem 0.7rem;
+        border: 1px solid #d4d4d8;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .hint {
+        font-size: 0.75rem;
+        color: #71717a;
+        margin-top: 0.3rem;
+      }
+      button {
+        margin-top: 1.25rem;
+        background: #059669;
+        color: #fff;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.6rem 1.4rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #status {
+        font-size: 0.85rem;
+        margin-top: 0.75rem;
+        min-height: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Conform<span>IA</span> — Détection Shadow AI</h1>
+    <p class="hint">
+      Cette extension remonte uniquement le domaine des outils IA visités et un
+      horodatage, jamais le contenu des pages. Elle ne bloque rien.
+    </p>
+    <form id="form">
+      <label for="token">Jeton d'ingestion de la société</label>
+      <input id="token" type="text" placeholder="Collez le jeton du dashboard" required />
+      <p class="hint">Disponible dans le dashboard ConformIA (section « Connecter l'extension »).</p>
+
+      <label for="apiBaseUrl">URL du backend</label>
+      <input id="apiBaseUrl" type="url" placeholder="http://localhost:3000" />
+      <p class="hint">Laissez la valeur par défaut en développement local.</p>
+
+      <button type="submit">Enregistrer</button>
+      <p id="status"></p>
+    </form>
+    <script type="module" src="dist/options.js"></script>
+  </body>
+</html>

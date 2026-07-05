@@ -35,7 +35,7 @@ export const getProfile = cache(async () => {
   const { data, error } = await supabase
     .from("users")
     .select(
-      "id, email, role, company_id, companies ( name, sector, siret, employee_count )",
+      "id, email, role, company_id, companies ( name, sector, siret, employee_count, ingest_token )",
     )
     .eq("id", user.id)
     .single();
@@ -46,4 +46,24 @@ export const getProfile = cache(async () => {
   }
 
   return data;
+});
+
+/** Outils IA détectés par l'extension (RLS : limité à la société courante). */
+export const getDetectedTools = cache(async () => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("detected_tools")
+    .select("id, domain, tool_name, distinct_users_count, last_seen")
+    .order("last_seen", { ascending: false });
+  return data ?? [];
+});
+
+/** Outils IA déclarés manuellement (RLS : limité à la société courante). */
+export const getDeclaredTools = cache(async () => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("declared_tools")
+    .select("id, tool_name, description, created_at")
+    .order("created_at", { ascending: false });
+  return data ?? [];
 });

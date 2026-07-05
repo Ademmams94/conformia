@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { getProfile } from "@/lib/dal";
+import { getProfile, getDetectedTools, getDeclaredTools } from "@/lib/dal";
 import { logout } from "@/app/actions/auth";
+import { ExtensionCard } from "./extension-card";
 
 const SECTOR_LABELS: Record<string, string> = {
   recrutement_rh: "Recrutement / RH",
@@ -8,6 +9,11 @@ const SECTOR_LABELS: Record<string, string> = {
   assurance: "Assurance",
   autre: "Autre",
 };
+
+const dateFmt = new Intl.DateTimeFormat("fr-FR", {
+  dateStyle: "short",
+  timeStyle: "short",
+});
 
 export default async function DashboardPage() {
   const profile = await getProfile();
@@ -20,6 +26,11 @@ export default async function DashboardPage() {
   const company = Array.isArray(profile.companies)
     ? profile.companies[0]
     : profile.companies;
+
+  const [detected, declared] = await Promise.all([
+    getDetectedTools(),
+    getDeclaredTools(),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-black">
@@ -59,9 +70,21 @@ export default async function DashboardPage() {
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {[
-            { title: "Outils détectés", value: "—", hint: "Via l'extension" },
-            { title: "Outils déclarés", value: "—", hint: "Saisie manuelle" },
-            { title: "À classer", value: "—", hint: "Niveau de risque" },
+            {
+              title: "Outils détectés",
+              value: detected.length,
+              hint: "Via l'extension",
+            },
+            {
+              title: "Outils déclarés",
+              value: declared.length,
+              hint: "Saisie manuelle",
+            },
+            {
+              title: "À classer",
+              value: detected.length + declared.length,
+              hint: "Niveau de risque",
+            },
           ].map((card) => (
             <div
               key={card.title}
@@ -74,11 +97,55 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        <div className="mt-8 rounded-xl border border-dashed border-black/10 p-8 text-center dark:border-white/15">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            La cartographie des outils IA arrive à la prochaine étape.
-          </p>
-        </div>
+        <section className="mt-8">
+          <h2 className="mb-3 text-base font-semibold">Outils IA détectés</h2>
+          {detected.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-black/10 p-8 text-center dark:border-white/15">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Aucun outil détecté pour l&apos;instant. Installez l&apos;extension
+                sur les postes de l&apos;équipe pour lancer la détection.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-black/5 bg-white dark:border-white/10 dark:bg-zinc-900">
+              <table className="w-full text-sm">
+                <thead className="border-b border-black/5 text-left text-xs text-zinc-500 dark:border-white/10">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">Outil</th>
+                    <th className="px-4 py-3 font-medium">Domaine</th>
+                    <th className="px-4 py-3 font-medium">Utilisateurs</th>
+                    <th className="px-4 py-3 font-medium">Dernière activité</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detected.map((tool) => (
+                    <tr
+                      key={tool.id}
+                      className="border-b border-black/5 last:border-0 dark:border-white/10"
+                    >
+                      <td className="px-4 py-3 font-medium">
+                        {tool.tool_name ?? "—"}
+                      </td>
+                      <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                        {tool.domain}
+                      </td>
+                      <td className="px-4 py-3">{tool.distinct_users_count}</td>
+                      <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                        {tool.last_seen
+                          ? dateFmt.format(new Date(tool.last_seen))
+                          : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        {profile.role === "admin" && company?.ingest_token && (
+          <ExtensionCard token={company.ingest_token} />
+        )}
 
         <p className="mt-8 text-xs text-zinc-500">
           Outil d&apos;auto-diagnostic. Ne remplace pas un avis juridique

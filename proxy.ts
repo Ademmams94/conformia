@@ -17,6 +17,6 @@ export const config = {
      * - le favicon et les images/assets publics
      * Sinon la logique d'auth peut bloquer le chargement du CSS/JS/images.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

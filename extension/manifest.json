@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "ConformIA — Détection Shadow AI",
+  "version": "0.1.0",
+  "description": "Détecte les outils IA visités (domaine + horodatage uniquement) pour la cartographie de conformité AI Act. Ne capture aucun contenu, ne bloque rien.",
+  "permissions": ["webNavigation", "storage"],
+  "host_permissions": ["http://localhost:3000/*"],
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+  "options_page": "options.html"
+}
