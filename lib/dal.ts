@@ -67,3 +67,27 @@ export const getDeclaredTools = cache(async () => {
     .order("created_at", { ascending: false });
   return data ?? [];
 });
+
+export interface ClassificationRow {
+  tool_id: string;
+  tool_source: "detected" | "declared";
+  risk_level: "prohibited" | "high" | "limited" | "minimal";
+  annexe_iii_category: string | null;
+  rationale: string;
+  needs_legal_review: boolean;
+}
+
+/** Classifications de risque, indexées par `${tool_source}:${tool_id}`. */
+export const getClassifications = cache(async () => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("risk_classifications")
+    .select(
+      "tool_id, tool_source, risk_level, annexe_iii_category, rationale, needs_legal_review",
+    );
+  const map = new Map<string, ClassificationRow>();
+  for (const c of (data ?? []) as ClassificationRow[]) {
+    map.set(`${c.tool_source}:${c.tool_id}`, c);
+  }
+  return map;
+});
