@@ -237,6 +237,33 @@ export default async function DashboardPage() {
           )}
         </section>
 
+        {/* Documents de conformité */}
+        <section className="mt-8">
+          <h2 className="mb-1 text-base font-semibold">
+            Documents de conformité
+          </h2>
+          <p className="mb-3 text-sm text-zinc-600 dark:text-zinc-400">
+            Exportez votre registre de cartographie et votre modèle d&apos;AIPD
+            pré-rempli à partir des outils recensés ci-dessus.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- endpoint de téléchargement, pas une page */}
+            <a
+              href="/api/documents/cartographie"
+              className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/15 dark:bg-zinc-900 dark:hover:bg-white/[.06]"
+            >
+              📄 Registre de cartographie (PDF)
+            </a>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- endpoint de téléchargement, pas une page */}
+            <a
+              href="/api/documents/aipd"
+              className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/15 dark:bg-zinc-900 dark:hover:bg-white/[.06]"
+            >
+              📄 Modèle d&apos;AIPD (PDF)
+            </a>
+          </div>
+        </section>
+
         {isAdmin && company?.ingest_token && (
           <ExtensionCard token={company.ingest_token} />
         )}
